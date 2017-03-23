@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NetworkCommunication</string>
+    <string name="button">Button</string>
+    <string name="buttonDownload">Download song</string>
+    <string name="buttonAdd">Add song</string>
+
+
+</resources>
