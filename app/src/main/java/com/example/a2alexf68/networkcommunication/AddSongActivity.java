@@ -1,7 +1,7 @@
 package com.example.a2alexf68.networkcommunication;
 
+import android.app.Activity;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +10,7 @@ import android.widget.EditText;
 import java.io.IOException;
 import java.net.URL;
 
-public class AddSongActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddSongActivity extends Activity implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +22,13 @@ public class AddSongActivity extends AppCompatActivity implements View.OnClickLi
     }
     @Override
     public void onClick(View view){
-        EditText.editSongTitle = (EditText) findViewById(R.id.editSongTitle);
+        EditText editSongTitle = (EditText) findViewById(R.id.editSongTitle);
         String songTitle = editSongTitle.getText().toString();
 
-        EditText.editArtist = (EditText) findViewById(R.id.editArtist);
+        EditText editArtist = (EditText) findViewById(R.id.editArtist);
         String artist = editArtist.getText().toString();
 
-        EditText.editYear = (EditText) findViewById(R.id.editYear);
+        EditText editYear = (EditText) findViewById(R.id.editYear);
         String year = editYear.getText().toString();
 
         (new AddSongAsyncTask()).execute(songTitle, artist, year);
@@ -36,7 +36,7 @@ public class AddSongActivity extends AppCompatActivity implements View.OnClickLi
     class AddSongAsyncTask extends AsyncTask <String, Void, String> {
 
         @Override
-        protected String doinBackground(String... params)
+        protected String doInBackground(String... params)
         {
             String postData = "song=" + params [0] + "%artist=" +params [1] + params [2];
 

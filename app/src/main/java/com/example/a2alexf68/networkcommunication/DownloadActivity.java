@@ -3,7 +3,6 @@ package com.example.a2alexf68.networkcommunication;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import android.app.AlertDialog;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-public class DownloadActivity extends AppCompatActivity implements View.OnClickListener {
+public class DownloadActivity extends Activity implements View.OnClickListener {
 
     class DownloadSongAsyncTask extends AsyncTask<String,Void,String> {
 
@@ -31,7 +34,7 @@ public class DownloadActivity extends AppCompatActivity implements View.OnClickL
             HttpURLConnection connection;
 
             try {
-                URL urlObject = new URL(url + "?artist" + artist);
+                URL urlObject = new URL(url + "?artist=" + artist);
                 connection = (HttpURLConnection) urlObject.openConnection();
 
                 if (connection.getResponseCode() == HTTP_OK) {
@@ -74,8 +77,11 @@ public class DownloadActivity extends AppCompatActivity implements View.OnClickL
         String url = etURL.getText().toString();
 
         EditText etArtist = (EditText) findViewById(R.id.etArtist);
-        String artist = etURL.getText().toString();
+        String artist = etArtist.getText().toString();
 
         new DownloadSongAsyncTask().execute(url,artist);
     }
 }
+
+
+
