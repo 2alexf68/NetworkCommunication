@@ -40,18 +40,21 @@ public class AddSongActivity extends Activity implements View.OnClickListener{
 
         (new AddSongAsyncTask()).execute(songTitle, artist, year);
     }
+
+    //1st parameter to AsyncTask is input data type for doInBackground method
+    //2nd parameter to AsyncTask is the progress data type
+    //3rd parameter to AsyncTask is return type of the doInBackground method
     class AddSongAsyncTask extends AsyncTask <String, Void, String> {
 
         @Override
         protected String doInBackground(String... params)
         {
-            String postData = "song=" + params [0] + "%artist=" +params [1] + params [2];
-            HttpURLConnection conn = null;
+            String postData = "song=" + params[0] + "&artist=" +params[1] +"&year=" + params[2];
+
 
             try{
-                URL urlObject = new URL("http://www.free-map.org.uk/course/mad/ws/hits.php");
-                conn = (HttpURLConnection)urlObject.openConnection();
-
+                URL urlObj = new URL("http://www.free-map.org.uk/course/mad/ws/addhit.php");
+                HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
                 conn.setDoOutput(true);
                 conn.setFixedLengthStreamingMode(postData.length());
 
@@ -64,23 +67,17 @@ public class AddSongActivity extends Activity implements View.OnClickListener{
                     BufferedReader br = new BufferedReader(new InputStreamReader(in));
                     String all = "", line;
                     while((line = br.readLine()) !=null)
-                        all += line;
+                        all += line
                     return all;
                 }
                 else
                     return "HTTP ERROR: " + conn.getResponseCode();
 
-
             }
             catch(IOException e)
             {
                 return e.toString();
-            }
-            finally
-            {
-                if(conn!=null)
-                    conn.disconnect();
-            }
+            }10
         }
         public void onPostExecute(String result)
         {

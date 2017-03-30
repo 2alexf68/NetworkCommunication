@@ -27,39 +27,68 @@ public class DownloadActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected String doInBackground(String... params) {
-
             String url = params[0];
             String artist = params[1];
 
             HttpURLConnection connection;
 
             try {
-                URL urlObject = new URL(url + "?artist=" + artist);
+
+
+                //open connection to url
+                //String url = "http://www.free-map.org.uk/course/mad/ws/hits.php";
+                URL urlObject = new URL(url + "?artist=" + artist + "&format=json");
                 connection = (HttpURLConnection) urlObject.openConnection();
 
                 if (connection.getResponseCode() == HTTP_OK) {
+                    //get back JSON data
                     InputStream in = connection.getInputStream();
                     BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-                    String lines = "";
+                    String jsonData = "";
                     String line = br.readLine();
 
                     while (line != null) {
-                        lines += line; //add it to lines
+                        jsonData += line; //add it to lines
                         line = br.readLine();// read line
                     }
-                    return lines;
+
+                    // make the json pretty plain text
+                    JSONArray jsonArray = new JSONArray(jsonData);
+
+                    String result = "";
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject songObj = jsonArray.getJSONObject(i);
+
+                        String songTitle = songObj.getString("song");
+                        String artistName = songObj.getString("artist");
+                        String year = songObj.getString("year");
+
+                        String pretty = "Song Title: " +songTitle;
+                        pretty += ", Artist: " +artistName;
+                        pretty += ", Year: " + year + "\n";
+
+                        result += pretty;
+                    }
+
+                    return result;
                 }
                 else
                 {
-                    return "Error: smth";
+                    return "Error: " + connection.getResponseMessage();
                 }
+
             } catch (IOException e) {
+                return "Error: " + e.getMessage();
+            }  catch (JSONException e)
+            {
                 return "Error: " + e.getMessage();
             }
         }
+        //display the string in the result text view
         public void onPostExecute (String songs){
-            TextView songsTextView = (TextView) findViewById(R.id.tv1);
+            TextView songsTextView = (TextView) findViewById(R.id.tv1);r
             songsTextView.setText(songs);
         }
     }
@@ -70,6 +99,7 @@ public class DownloadActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_download);
         Button downloadSongButton = (Button)findViewById(R.id.downloadSongButton);
         downloadSongButton.setOnClickListener(this);
+
     }
     public void onClick(View v)
     {
